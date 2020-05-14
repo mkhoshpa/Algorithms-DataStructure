@@ -147,9 +147,52 @@ def BSTRangeSearch(low,high,root,output = None):
     return
 
 
+def BSTDeleteMin(root):
+    if root.left is None:
+        if root.right is None:
+            return None, root.key, root.val
+        else:
+            return root.right, root.key, root.val
+
+    else:
+        root.left, out_key, out_val = BSTDeleteMin(root.left)
+        return root, out_key, out_val
 
 
-if __name__ == '__main__':
+def twoSum(nums, target):
+    oldNums = [e for e in nums]
+    nums.sort()
+    def binarySearch(nums,target,start=0,end=len(nums)-1):
+        mid = (start+end)//2
+        if start > end or start < 0 :
+            return -1
+        if nums[mid] == target:
+            #print(mid)
+            #print(nums[mid])
+            #print()
+            return mid
+        elif nums[mid] > target:
+            return binarySearch(nums,target,start=start,end=mid-1)
+        else:
+            return binarySearch(nums,target,start=mid+1,end=end)
+    for i in range(len(nums)-1):
+        e = nums[i]
+        #print(i,':',e,target-e)
+        result = binarySearch(nums,target-e,start=i+1)
+        if result != -1:
+            print(nums[i],':',nums[result])
+            new_i = [j for j in range(len(oldNums)) if oldNums[j] == e]
+            new_i = new_i[0]
+            if nums[i] == nums[result]:
+                new_result = [j for j in range(new_i,len(oldNums)) if oldNums[j] == nums[result]]
+                new_result = new_result[0]
+            else:
+                new_result = [j for j in range(len(oldNums)) if oldNums[j] == nums[result]]
+                new_result = new_result[0]
+            return [new_i,new_result]
+    return
+
+def main():
     arr = [random.randint(0,100) for i in range(10)]
     random.shuffle(arr)
     root = None
@@ -157,10 +200,18 @@ if __name__ == '__main__':
         root = BSTInsert(element,random.randint(0,100),root)
     BSTOrderedPrint(root)
     print()
+    for i in range(10):
+        root,key,val = BSTDeleteMin(root)
+        print('key:',key,'val:',val)
+    #BSTOrderedPrint(root)
+    #print()
     #for element in arr:
     #    print(element,BSTrank(element,root),sep=':',end=' ')
     #print()
     #print(BSTAtIndex(4,root))
-    output = []
-    BSTRangeSearch(10,40,root,output = output)
-    print(output)
+    #output = []
+    #BSTRangeSearch(10,40,root,output = output)
+    #print(output)
+
+if __name__ == '__main__':
+   main()
