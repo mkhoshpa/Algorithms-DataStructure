@@ -157,7 +157,6 @@ if __name__ == '__main__':
         root = BSTInsert(element,random.randint(0,100),root)
     BSTOrderedPrint(root)
     print()
-    #print()
     #for element in arr:
     #    print(element,BSTrank(element,root),sep=':',end=' ')
     #print()
