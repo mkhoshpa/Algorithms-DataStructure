@@ -59,18 +59,80 @@ def BSTDeleteMin(root, out=[]):
         return root
 
 
-class Solution:
-    def mergeKList(self, lists):
+
+def BSTMergeKList( lists):
+    output_start = None
+    output_end = None
+    current_pool = None
+    for i, node in enumerate(lists):
+        if node is not None:
+            current_pool = BSTInsert(node.val, i, current_pool)
+    while current_pool is not None:
+        out = []
+        current_pool = BSTDeleteMin(current_pool, out)
+        minimum_val, minimum_idx = out[0]
+        if output_start is None:
+            output_start = ListNode(minimum_val)
+            output_end = output_start
+        else:
+            output_end.next = ListNode(minimum_val)
+            output_end = output_end.next
+        if lists[minimum_idx].next is not None:
+            lists[minimum_idx] = lists[minimum_idx].next
+            current_pool = BSTInsert(lists[minimum_idx].val, minimum_idx, current_pool)
+    return output_start
+
+
+def swim(arr, idx):
+    while idx // 2 > 0:
+        p = idx // 2
+        if arr[idx] < arr[p]:
+            arr[idx], arr[p] = arr[p], arr[idx]
+            idx = p
+        else:
+            return
+
+
+def sink(arr, idx, length=None):
+    if length is None:
+        length = len(arr)
+    while 2 * idx < length:
+        child = 2 * idx
+        if child + 1 < length:
+            if arr[child + 1] < arr[child]:
+                child = child + 1
+        if arr[child] < arr[idx]:
+            arr[child], arr[idx] = arr[idx], arr[child]
+            idx = child
+        else:
+            break
+
+
+def heap_push(arr, item):
+    arr.append(item)
+    swim(arr, len(arr) - 1)
+
+
+def heap_pop(arr):
+    out = arr[1]
+    arr[1] = arr[len(arr) - 1]
+    del arr[len(arr) - 1]
+    sink(arr, 1)
+    return out
+
+
+
+def heapMergeKLists(lists):
         output_start = None
         output_end = None
-        current_pool = None
+        current_pool = ['_']
         for i, node in enumerate(lists):
             if node is not None:
-                current_pool = BSTInsert(node.val, i, current_pool)
-        while current_pool is not None:
-            out = []
-            current_pool = BSTDeleteMin(current_pool, out)
-            minimum_val, minimum_idx = out[0]
+                heap_push(current_pool, (node.val, i))
+        while len(current_pool) > 1:
+
+            minimum_val, minimum_idx = heap_pop(current_pool)
+
             if output_start is None:
                 output_start = ListNode(minimum_val)
                 output_end = output_start
@@ -79,9 +141,9 @@ class Solution:
                 output_end = output_end.next
             if lists[minimum_idx].next is not None:
                 lists[minimum_idx] = lists[minimum_idx].next
-                current_pool = BSTInsert(lists[minimum_idx].val, minimum_idx, current_pool)
+                # current_pool = BSTInsert(lists[minimum_idx].val,minimum_idx, current_pool)
+                heap_push(current_pool, (lists[minimum_idx].val, minimum_idx))
         return output_start
-
 
 def printListNode(listnode):
     while listnode is not None:
@@ -103,8 +165,7 @@ def main():
                 output_end.next = ListNode(element)
                 output_end = output_end.next
         lists.append(output_start)
-    s = Solution()
-    node = s.mergeKList(lists)
+    node = heapMergeKLists(lists)
     printListNode(node)
 
 
