@@ -201,16 +201,46 @@ def heap_sort(arr):
         i -= 1
         sink(arr,1,i)
 
+def floor(nums, element, low, high):
+        if element > nums[high]:
+            return high
+        if element <= nums[low]:
+            return low - 1
+        if low == high:
+            return low
+        mid = (low + high) // 2
+        if element ==  nums[mid]:
+            return mid
+        if element > nums[mid]:
+            return floor(nums, element, mid+1, high)
+        return floor(nums, element, low, mid - 1)
 
+class KthLargest:
 
+    def __init__(self, k: int, nums):
+        self.k = k
+        nums.sort()
+        self.nums = nums
 
+    def add(self, val: int) -> int:
+        def floor(nums, element, low, high):
+            if element > nums[high]:
+                return high
+            if element <= nums[low]:
+                return low - 1
+            if low == high:
+                return low
+            mid = (low + high) // 2
+            if element ==  nums[mid]:
+                return mid
+            if element > nums[mid]:
+                return floor(nums, element, mid+1, high)
+            return floor(nums, element, low, mid - 1)
+        index = floor(self.nums,val,0,len(self.nums)-1)
+        self.nums.insert(index+1,val)
+        return self.nums[self.k-1]
+
+from decimal import *
 if __name__ == '__main__':
-    for _ in range(0):
-        arr = [i for i in range(100)]
-        random.shuffle(arr)
-        arr.insert(0,'_')
-        #for k in range(10):
-        #    arr.append(k)
-
-        heap_sort(arr)
-        print(arr)
+    getcontext().prec = 6
+    print(Decimal(1/7) / Decimal(7))
