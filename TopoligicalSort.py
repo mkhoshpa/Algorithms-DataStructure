@@ -62,4 +62,7 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    #main()
+    s = input()
+    x = s.split()
+    print(x)
