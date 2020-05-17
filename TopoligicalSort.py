@@ -8,7 +8,11 @@ class Graph:
     def adj(self, v):
         return self.graph[v]
 
-
+#Topological sort using DFS
+#return [] if grapgh has a cycle
+#findOrder get num: number of vertices
+#and p: pairs of [v,w] representing a directed edge between w->v
+#returns the topological order.
 class Solution:
     def dfs(self, v):
         self.visited[v] = True
