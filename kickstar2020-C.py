@@ -176,12 +176,18 @@ def Problem6():
         print('Case #' + str(testcase + 1) + ': ' + str(out))
 
 
+import random
+class SingletonRand:
+    num = None
+    def __init__(self):
+        if SingletonRand.num is None:
+            SingletonRand.num = random.random()
+    def __str__(self):
+        return str(SingletonRand.num)
+
+
 if __name__ == '__main__':
-    trie = Trie()
-    trie.add('abs')
-    trie.add('aaa')
-    trie.add('bbfgd')
-    trie.add('a')
-    print(trie.root.children['a'].count)
-    print(trie.root.children['a'].children['b'].count)
-    print(trie.count_prefix('abs'))
+    x = SingletonRand()
+    print(x)
+    y=SingletonRand()
+    print(y)
