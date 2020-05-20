@@ -37,6 +37,8 @@ class IndexedMinPQ:
             self.key[self.pq[1]] = None
             self.qp[self.pq[1]] = None
             self.pq[1] = self.pq[self.total]
+            self.qp[self.pq[1]] = 1
+            self.pq[self.total] = None
             self.total -= 1
             self.__sink(1)
             return out
@@ -54,6 +56,7 @@ class IndexedMinPQ:
                     child_i = other_child
                     child_key = other_child_key
             if child_key < key:
+
                 self.pq[i], self.pq[child_i] = self.pq[child_i], self.pq[i]
                 self.qp[self.pq[i]], self.qp[self.pq[child_i]] = self.qp[self.pq[child_i]], self.qp[self.pq[i]]
                 self.__sink(child_i)
@@ -71,6 +74,16 @@ class IndexedMinPQ:
         self.key[i] = key
         self.__swim(self.qp[i])
 
+    def increaseKey(self,i,key):
+        if i<0 or i> self.N:
+            raise IndexError('index i is not in the range')
+        if self.key[i] is None:
+            raise IndexError('index i is not in the IndexedMinPQ')
+        assert type(i) == int
+        assert key > self.key[i]
+        self.key[i] = key
+        self.__sink(self.qp[i])
+
 if __name__ == '__main__':
     q = IndexedMinPQ(10)
     q.insert(5,'d')
@@ -79,7 +92,7 @@ if __name__ == '__main__':
     q.insert(1, 'f')
     print(q.isEmpty())
     print(q.deleteMin())
-    q.decreaseKey(3,'a')
+    q.increaseKey(5,'x')
     print(q.deleteMin())
     print(q.deleteMin())
     print(q.deleteMin())
