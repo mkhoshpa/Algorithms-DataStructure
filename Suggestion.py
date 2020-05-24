@@ -72,6 +72,7 @@ if __name__ == '__main__':
     words = ['caller','caller','can','catwalk','catwalk','cat','cat','catwalk','catwalky','camera','camera','camery','cam','camera']
     for word in words:
         S.add_word(word)
+    print(S.get_recomendation('ca'))
     print(S.get_recomendation('cam'))
     print(S.get_recomendation('cal'))
     print(S.get_recomendation('cat'))
